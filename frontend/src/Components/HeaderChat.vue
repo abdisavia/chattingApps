@@ -1,27 +1,35 @@
 <script setup>
-import { selectedChat } from '@/stores/selectedChat'
+import { conversationData } from '@/stores/conversationData'
+import { groupData } from '@/stores/groupData'
+import { userData } from '@/stores/userData'
 import { Icon } from '@iconify/vue'
-const props = defineProps(['currentUser'])
+const props = defineProps(['currentUser', 'selectedChat'])
+console.log(props.selectedChat)
 </script>
 
 <template>
   <header class="header_chat_container">
     <img
-      v-bind:src="selectedChat.data.group.group_image"
+      v-bind:src="groupData.findGroup(props.selectedChat.group).group_image"
       alt=""
-      v-if="selectedChat.data.type === 'group'"
+      v-if="props.selectedChat.type === 'group'"
     />
     <Icon icon="mdi:user" width="100%" class="profilePic_icon" v-else />
     <div>
-      <h2 v-if="selectedChat.data.type === 'group'">{{ selectedChat.data.group.group_name }}</h2>
+      <h2 v-if="props.selectedChat.type === 'group'">
+        {{ groupData.findGroup(props.selectedChat.group).group_name }}
+      </h2>
       <h2 v-else>
         {{
-          selectedChat.data.participants.find(
-            (curr, idx) => curr.user_id !== props.currentUser.user_id,
+          userData.findUser(
+            props.selectedChat.participants.find((curr, idx) => curr !== props.currentUser.user_id),
           ).name
         }}
       </h2>
-      <p>{{ selectedChat.data.participants.length }} participant</p>
+      <p>
+        {{ props.selectedChat.participants.length }}
+        participant
+      </p>
     </div>
   </header>
 </template>
@@ -34,14 +42,15 @@ const props = defineProps(['currentUser'])
 }
 
 .header_chat_container img {
-  width: 76px;
-  height: 76px;
+  width: 50px;
+  height: 50px;
   object-fit: cover;
   border-radius: 100%;
 }
 
 .profilePic_icon {
   width: 50px;
+  height: 50px;
   color: var(--primary-color);
 }
 </style>

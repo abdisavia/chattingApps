@@ -2,15 +2,29 @@
 import NavigationSidebar from './Components/navigationSidebar.vue'
 import InboxSidebar from './Components/InboxSidebar.vue'
 import Chat from './Components/Chat.vue'
-import { selectedChat } from './stores/selectedChat.js'
-console.log(selectedChat)
+import { userData } from './stores/userData'
+import { conversationData } from './stores/conversationData'
+import { onBeforeMount, ref } from 'vue'
+
+onBeforeMount(() => {
+  userData.currentUser = userData.findUser('admin@mail.com')
+})
+
+const selectedChat = ref()
+const changeSelectedChat = (selectedConv) => {
+  selectedChat.value = selectedConv
+}
 </script>
 
 <template>
   <div class="container">
     <NavigationSidebar />
-    <InboxSidebar />
-    <Chat />
+    <InboxSidebar
+      v-bind:current-user="userData.currentUser"
+      @change-selected-chat="changeSelectedChat"
+      v-bind:selected-chat="selectedChat"
+    />
+    <Chat v-bind:current-user="userData.currentUser" v-bind:selected-chat="selectedChat" />
   </div>
 </template>
 

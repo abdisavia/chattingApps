@@ -1,0 +1,60 @@
+[
+  {
+    "message_id": "885512",
+    "sender_id": "customer@mail.com",
+    "type": "text",
+    "message": "Selamat malam",
+    "attachment": [],
+    "created_at": "2025-03-10T09:30:00Z"
+  },
+  {
+    "message_id": "885513",
+    "sender_id": "agent@mail.com",
+    "type": "text",
+    "message": "Malam",
+    "attachment": [],
+    "created_at": "2025-03-10T09:31:10Z"
+  },
+  {
+    "message_id": "885514",
+    "sender_id": "agent@mail.com",
+    "type": "text",
+    "message": "Ada yang bisa saya bantu?",
+    "attachment": [],
+    "created_at": "2025-03-10T09:30:00Z"
+  },
+  {
+    "message_id": "885515",
+    "sender_id": "customer@mail.com",
+    "type": "text",
+    "message": "Saya ingin mengirimkan bukti pembayaran, karena diaplikasi selalu gagal",
+    "attachment": [],
+    "created_at": "2025-03-10T09:30:00Z"
+  },
+  {
+    "message_id": "885516",
+    "sender_id": "agent@mail.com",
+    "type": "text",
+    "message": "Baik, silahkan kirimkan lampiran bukti pembayarannya",
+    "attachment": [],
+    "created_at": "2025-03-10T09:30:00Z"
+  },
+  {
+    "message_id": "885517",
+    "sender_id": "customer@mail.com",
+    "receiver_id": "admin@mail.com",
+    "type": "text",
+    "message": "Siang kak, saya ingin minta link group product A dong",
+    "attachment": [],
+    "created_at": "2025-03-10T09:00:00Z"
+  },
+  {
+    "message_id": "885518",
+    "sender_id": "admin@mail.com",
+    "receiver_id": "customer@mail.com",
+    "type": "text",
+    "message": "Baik kak, ini linknya ....",
+    "attachment": [],
+    "created_at": "2025-03-10T09:01:30Z"
+  }
+]

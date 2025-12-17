@@ -1,8 +1,15 @@
 <script setup>
 import { userData } from '@/stores/userData'
+import { computed, onBeforeMount, onMounted, onUpdated, ref } from 'vue'
+import { messageData } from '@/stores/messageData'
 const props = defineProps(['message', 'currentUser'])
 
-const date = new Date()
+const formattedTime = computed(() => {
+  const date = new Date(props.message.created_at)
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  return `${hours}:${minutes}`
+})
 </script>
 
 <template>
@@ -20,7 +27,7 @@ const date = new Date()
         )
       "
     >
-      <small>{{ date.getUTCHours(props.message.created_at) }}:{{ date.getUTCMinutes() }}</small>
+      <small>{{ formattedTime }}</small>
       <p>{{ userData.findUser(props.message.sender_id)?.name }}</p>
     </div>
     <div
@@ -32,8 +39,8 @@ const date = new Date()
         )
       "
     >
-      <p v-if="props.message.message_type === 'text'">{{ props.message.content }}</p>
-      <img v-if="type === 'image'" v-bind:src="props.imageUrl" />
+      <p v-if="props.message.type === 'text'">{{ props.message.message }}</p>
+      <img v-if="props.message.type === 'image'" v-bind:src="props.message.attachment[0]" />
     </div>
   </div>
 </template>

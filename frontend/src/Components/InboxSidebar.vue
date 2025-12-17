@@ -1,9 +1,14 @@
 <script setup>
 import ChatList from './ChatList.vue'
-import data from '@/stores/data.json'
+// import data from '@/stores/data.json'
 import Filterlist from './Filterlist.vue'
-import { selectedChat } from '@/stores/selectedChat.js'
-console.log(data)
+import { conversationData } from '@/stores/conversationData'
+const emit = defineEmits(['changeSelectedChat'])
+const props = defineProps(['currentUser', 'selectedChat'])
+
+const handleSelectedChange = (selectedConv) => {
+  emit('changeSelectedChat', selectedConv)
+}
 </script>
 
 <template>
@@ -11,16 +16,17 @@ console.log(data)
     <h1>Inbox</h1>
     <Filterlist />
     <ul class="chatData_container">
-      <li v-for="(dat, idx) in data">
+      <li v-for="(dat, idx) in conversationData.data">
         <ChatList
           v-bind:chat-data="dat"
-          v-bind:is-active="idx == 0 ? true : false"
+          v-bind:is-active="
+            dat.conversation_id == props.selectedChat?.conversation_id ? true : false
+          "
           v-bind:key="dat.conversation_id"
-          v-on:click="
-            () => {
-              selectedChat.changeData(dat)
-              console.log(Object.keys(selectedChat.data))
-            }
+          v-on:click="handleSelectedChange(dat)"
+          v-bind:current-user="props.currentUser"
+          v-show="
+            dat.participants.find((curr, idx) => curr == props.currentUser.user_id) ? true : false
           "
         />
       </li>

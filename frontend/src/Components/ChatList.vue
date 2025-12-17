@@ -1,5 +1,8 @@
 <script setup>
-const props = defineProps(['chatData', 'isActive'])
+const props = defineProps(['chatData', 'isActive', 'currentUser'])
+import { groupData } from '@/stores/groupData'
+import { userData } from '@/stores/userData'
+import { messageData } from '@/stores/messageData'
 import { Icon } from '@iconify/vue'
 </script>
 
@@ -7,7 +10,7 @@ import { Icon } from '@iconify/vue'
   <button v-bind:class="'container'.concat(props.isActive ? ' container--active' : '')">
     <img
       v-if="props.chatData.type === 'group'"
-      v-bind:src="props.chatData.group.group_image"
+      v-bind:src="groupData.findGroup(props.chatData.group)?.group_image"
       width="25px"
     />
     <div v-else class="icon_container">
@@ -15,12 +18,30 @@ import { Icon } from '@iconify/vue'
     </div>
 
     <div class="detail_container">
-      <h3 v-if="props.chatData.type === 'personal'">{{ props.chatData.participants[0].name }}</h3>
-      <h3 v-else>{{ props.chatData.group.group_name }}</h3>
+      <h3 v-if="props.chatData.type === 'personal'">
+        {{
+          userData.findUser(
+            props.chatData.participants.find((curr, idx) => curr !== props.currentUser.user_id),
+          ).name
+        }}
+      </h3>
+      <h3 v-else>{{ groupData.findGroup(props.chatData.group).group_name }}</h3>
       <p v-if="props.chatData.type === 'group'">
         {{ props.chatData.participants.length }} participant
       </p>
-      <p v-else>me:{{ props.chatData.messages[props.chatData.messages.length - 1].content }}</p>
+      <p v-else>
+        {{
+          userData.findUser(
+            props.chatData.participants.find(
+              (curr, idx) => curr.user_id !== props.currentUser.user_id,
+            ),
+          ).name
+        }}:
+        {{
+          messageData.findMessage(props.chatData.messages[props.chatData.messages.length - 1])
+            .message
+        }}
+      </p>
     </div>
   </button>
 </template>
@@ -31,7 +52,6 @@ import { Icon } from '@iconify/vue'
   gap: 10px;
   padding: 15px;
   border-radius: 5px;
-  /* background-color: white; */
   background: none;
   border: none;
   width: 100%;

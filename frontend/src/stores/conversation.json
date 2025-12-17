@@ -1,0 +1,15 @@
+[
+  {
+    "conversation_id": "conv_002",
+    "type": "group",
+    "group": "grp_001",
+    "participants": ["admin@mail.com", "agent@mail.com", "customer@mail.com"],
+    "messages": ["885512", "885513", "885514", "885515", "885516"]
+  },
+  {
+    "conversation_id": "conv_001",
+    "type": "personal",
+    "participants": ["customer@mail.com", "admin@mail.com"],
+    "messages": ["885517", "885518"]
+  }
+]
