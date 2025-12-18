@@ -36,9 +36,27 @@ const handleSelectedChange = (selectedConv) => {
 
 <style scoped>
 .chatlist_container {
-  width: 462px;
+  width: 500px;
   padding: 20px 25px;
   background-color: var(--secondary-color);
+}
+
+@media screen and (max-width: 600px) {
+  .chatlist_container {
+    width: 100%;
+    padding: 20px 16px;
+    background-color: var(--secondary-color);
+    min-height: 100vh;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1180px) {
+  .chatlist_container {
+    width: 100%;
+    padding: 20px 16px;
+    background-color: var(--secondary-color);
+    min-height: 100vh;
+  }
 }
 
 h1 {

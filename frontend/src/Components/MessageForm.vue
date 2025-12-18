@@ -34,7 +34,7 @@ const emit = defineEmits(['changeAttachmentState'])
 <style scoped>
 .messageForm_container {
   display: flex;
-  padding: 10px 0px;
+  padding: 10px 5px;
   height: 64px;
   width: 100%;
   align-items: center;
@@ -55,8 +55,8 @@ const emit = defineEmits(['changeAttachmentState'])
 
 .messageForm_textPlus_container input {
   width: 100%;
-  height: 100%;
-  padding: 0px 15px;
+  height: 50%;
+  padding: 16px 0px;
   border: none;
 }
 
@@ -82,9 +82,9 @@ const emit = defineEmits(['changeAttachmentState'])
 
 .messageForm_sendIcon_container {
   background-color: var(--primary-color);
-  padding: 5px;
-  width: 48px;
-  height: 48px;
+  padding: 10px;
+  width: auto;
+  height: auto;
   border-radius: 100%;
 }
 
@@ -93,5 +93,17 @@ const emit = defineEmits(['changeAttachmentState'])
   padding: 2px;
   width: auto;
   height: auto;
+}
+
+@media screen and (max-width: 600px) {
+  .messageForm_sendIcon_container {
+    padding: 10px;
+  }
+  .messageForm_container {
+    padding: 0px 16px;
+  }
+  .send_icon {
+    font-size: 20px;
+  }
 }
 </style>

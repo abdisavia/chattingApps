@@ -1,10 +1,11 @@
 <script setup>
 import { Icon } from '@iconify/vue'
+const emits = defineEmits(['openModalUser'])
 </script>
 
 <template>
   <aside class="sidebar_container">
-    <a class="sidebar_profilePic">
+    <a class="sidebar_profilePic" @click="() => emits('openModalUser')">
       <Icon icon="mdi:user" width="100%" class="sidebar_profilePic_icon" />
     </a>
     <div class="height_full">
@@ -12,7 +13,7 @@ import { Icon } from '@iconify/vue'
         <Icon icon="ph:chats-fill" class="sidebar_icon icon_active"></Icon>
       </a>
     </div>
-    <div>
+    <div class="sidebar_setLogout_container">
       <a class="sidebar_icon_container">
         <Icon icon="lets-icons:setting-fill" class="sidebar_icon icon_deactive"></Icon>
       </a>
@@ -40,7 +41,7 @@ import { Icon } from '@iconify/vue'
   justify-content: center;
   align-items: center;
   width: 60px;
-  height: fit-content;
+  height: auto;
   padding: 12px;
   border-radius: 100%;
   background-color: white;
@@ -62,17 +63,15 @@ import { Icon } from '@iconify/vue'
   border-radius: 100%;
   /* border: 1px solid white; */
 }
-
+.height_full {
+  height: 100%;
+}
 .sidebar_icon_container--active {
   background-color: white;
 }
 
 .sidebar_icon_container:hover {
   background-color: white;
-}
-
-.height_full {
-  height: 100%;
 }
 
 .sidebar_icon {
@@ -90,5 +89,32 @@ import { Icon } from '@iconify/vue'
 
 .sidebar_icon_container:hover .sidebar_icon {
   color: var(--primary-color);
+}
+
+@media screen and (max-width: 600px) {
+  .sidebar_container {
+    width: 100%;
+    height: 50px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .sidebar_profilePic {
+    width: 30px;
+    height: auto;
+    padding: 2px;
+  }
+  .sidebar_icon_container {
+    width: 25px;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+  }
+  .height_full {
+    display: none;
+  }
+  .sidebar_setLogout_container {
+    display: flex;
+    gap: 5px;
+  }
 }
 </style>

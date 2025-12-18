@@ -7,89 +7,25 @@ const previewSelected = ref({
   url: '',
   type: '',
 })
-const attachmentFiles = ref({
-  image: [],
-  video: [],
-  pdf: {},
-})
+const attachmentFiles = ref([])
 
 const attachmentEvent = (e) => {
   e.preventDefault()
   const files = e.target.files
-  console.log(files[0].type)
-  if (files[0].type === 'image/jpeg') {
-    saveImage(files)
-  } else if (files[0].type === 'video/mp4') {
-    saveVideo(files)
-  } else if (files[0].type === 'application/pdf') {
-    savePDF(files)
+  if (attachmentFiles.length > 0) {
+    attachmentFiles.value = []
   }
+  attachmentFiles.value.push({
+    preview: URL.createObjectURL(files[0]),
+    file: files[0],
+  })
+  console.log(attachmentFiles.value)
 }
 
-const saveImage = (files) => {
-  for (let i = 0; i < files.length; i++) {
-    attachmentFiles.value.image.push({ file: files[i], preview: URL.createObjectURL(files[i]) })
-  }
+const deleteFile = (e) => {
+  e.preventDefault()
+  attachmentFiles.value.splice(0, 1)
 }
-
-const saveVideo = (files) => {
-  for (let i = 0; i < files.length; i++) {
-    attachmentFiles.value.video.push({ file: files[i], preview: URL.createObjectURL(files[i]) })
-  }
-}
-
-const savePDF = (files) => {
-  attachmentFiles.value.pdf = { file: files[0], preview: URL.createObjectURL(files[0]) }
-  console.log(attachmentFiles.value.pdf)
-}
-
-// const deleteFile = (e) => {
-//   e.preventDefault()
-//   let indexFiles
-//   console.log(previewSelected.value.type)
-//   if (previewSelected.value.type === 'image') {
-//     indexFiles = deleteImageFile()
-//   } else if (previewSelected.value.type === 'video') {
-//     indexFiles = deleteVideoFile()
-//   }
-//   if (indexFiles === null) return
-//   updatePreviewSelected(indexFiles)
-// }
-
-// const deleteImageFile = () => {
-//   const indexFiles = attachmentFiles.value.image.findIndex(
-//     (curr, idx) => curr.preview === previewSelected.value.url,
-//   )
-//   if (indexFiles == -1) return
-//   attachmentFiles.value.image.splice(indexFiles, 1)
-//   return indexFiles
-// }
-
-// const deleteVideoFile = () => {
-//   const indexFiles = attachmentFiles.value.video.findIndex(
-//     (curr, idx) => curr.preview === previewSelected.value.url,
-//   )
-//   if (indexFiles == -1) return
-//   attachmentFiles.value.video.splice(indexFiles, 1)
-// }
-
-// const updatePreviewSelected = (indexFiles) => {
-//   if (indexFiles == 0) {
-//     previewSelected.value = {
-//       url: '',
-//       type: '',
-//     }
-//     return
-//   }
-//   if (previewSelected.type === 'image') {
-//     previewSelected.value.url = attachmentFiles.value.image[indexFiles - 1].preview
-//     previewSelected.value.type = 'image'
-//   } else if (previewSelected.type === 'video') {
-//     previewSelected.value.url = attachmentFiles.value.video[indexFiles - 1].preview
-//     previewSelected.value.type = 'video'
-//   }
-//   return
-// }
 </script>
 
 <template>
@@ -100,50 +36,31 @@ const savePDF = (files) => {
       )
     "
   >
-    <div
-      class="popupAttach_preview_container"
-      v-if="
-        attachmentFiles.image.length > 0 ||
-        attachmentFiles.video.length > 0 ||
-        Object.keys(attachmentFiles.pdf).length > 0
-      "
-    >
-      <VueFilesPreview
-        :file="attachmentFiles.pdf.file"
-        width="100%"
-        height="100%"
-        overflow="hidden"
-      />
-      <button
-        class="preview_delete_icon"
-        v-if="previewSelected.url !== '' && previewSelected.type !== ''"
-        @click="deleteFile"
-      >
-        <Icon icon="material-symbols:delete" />
-      </button>
-      <div class="preview_list">
+    <div class="popupAttach_preview_container" v-if="attachmentFiles.length > 0">
+      <div class="preview_img">
         <img
-          :src="imgPreview.preview"
+          :src="attachmentFiles[0].preview"
           alt=""
-          v-for="imgPreview in attachmentFiles.image"
-          class="preview_list_img"
+          v-if="['image/jpeg', 'image/png', 'image/jpg'].includes(attachmentFiles[0].file.type)"
         />
         <video
-          v-for="video in attachmentFiles.video"
-          :src="video.preview"
-          class="preview_list_img"
-          @click="
-            () => {
-              previewSelected.type = 'video'
-              previewSelected.url = video.preview
-            }
-          "
-        ></video>
+          :src="attachmentFiles[0].preview"
+          alt=""
+          v-else-if="attachmentFiles[0].file.type === 'video/mp4'"
+          autoplay
+        />
+        <VueFilesPreview
+          :file="attachmentFiles[0].file"
+          v-else-if="attachmentFiles[0].file.type === 'application/pdf'"
+        />
       </div>
+      <button class="preview_delete_icon" v-if="attachmentFiles.length > 0" @click="deleteFile">
+        <Icon icon="material-symbols:delete" />
+      </button>
     </div>
     <div class="popupAttach_fileOptions">
       <button class="attachment_icon_container">
-        <input type="file" multiple accept="image/*" name="uploadImage" @change="attachmentEvent" />
+        <input type="file" accept="image/*" name="uploadImage" @change="attachmentEvent" />
         <div>
           <Icon icon="material-symbols:imagesmode" class="attachment_Icon image_icon_color" />
         </div>
@@ -243,35 +160,11 @@ const savePDF = (files) => {
   max-height: 250px;
   border-radius: 8px;
 }
-
-.preview_list {
-  display: flex;
-  justify-content: start;
-  gap: 5px;
-  width: fit-content;
-  max-width: 254px;
-  /* border: 2px solid blue; */
-  overflow-x: auto;
-  padding-bottom: 2px;
-}
-
-.preview_list_img {
-  width: 50px;
-  height: 50px;
+.preview_img img {
+  width: 100%;
+  height: 250px;
   object-fit: cover;
-  aspect-ratio: 'square';
-  border-radius: 2px;
 }
-
-.preview_list::-webkit-scrollbar {
-  background: none;
-  height: 2px;
-}
-.preview_list::-webkit-scrollbar-thumb {
-  height: 0.5px;
-  background-color: white;
-}
-
 .preview_delete_icon {
   position: absolute;
   justify-content: center;
@@ -328,5 +221,12 @@ const savePDF = (files) => {
   color: whitesmoke;
   text-align: center;
   font-size: 15px;
+}
+
+.preview_img video {
+  width: 100%;
+  height: 250px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 </style>

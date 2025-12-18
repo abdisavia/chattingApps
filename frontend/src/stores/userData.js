@@ -7,6 +7,6 @@ const findUser = (user_id) => {
 
 export const userData = reactive({
   data: user,
-  currentUser: {},
+  currentUser: null,
   findUser: findUser,
 })

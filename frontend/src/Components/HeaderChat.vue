@@ -4,11 +4,23 @@ import { groupData } from '@/stores/groupData'
 import { userData } from '@/stores/userData'
 import { Icon } from '@iconify/vue'
 const props = defineProps(['currentUser', 'selectedChat'])
-console.log(props.selectedChat)
+const emits = defineEmits(['clearSelectedChat'])
 </script>
 
 <template>
   <header class="header_chat_container">
+    <button class="backIcon_container">
+      <Icon
+        icon="weui:arrow-filled"
+        class="backIcon"
+        v-on:click="
+          (e) => {
+            e.preventDefault()
+            emits('clearSelectedChat', true)
+          }
+        "
+      />
+    </button>
     <img
       v-bind:src="groupData.findGroup(props.selectedChat.group).group_image"
       alt=""
@@ -52,5 +64,38 @@ console.log(props.selectedChat)
   width: 50px;
   height: 50px;
   color: var(--primary-color);
+}
+
+.backIcon_container {
+  display: none;
+}
+@media screen and (max-width: 600px) {
+  .backIcon_container {
+    display: flex;
+    border: none;
+    background-color: white;
+  }
+  .backIcon {
+    transform: rotate(180deg);
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border-radius: 100%;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1280px) {
+  .backIcon_container {
+    display: flex;
+    border: none;
+    background-color: white;
+  }
+  .backIcon {
+    transform: rotate(180deg);
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border-radius: 100%;
+  }
 }
 </style>

@@ -69,7 +69,8 @@ import { Icon } from '@iconify/vue'
 
 .container img {
   width: 52px;
-  height: 52px;
+  height: auto;
+  aspect-ratio: 1/1;
   object-fit: cover;
   object-position: center;
   border-radius: 100%;
@@ -78,6 +79,7 @@ import { Icon } from '@iconify/vue'
 .icon_container {
   width: 52px;
   height: 52px;
+  aspect-ratio: 1/1;
   padding: 5px;
   border-radius: 100%;
   color: var(--primary-color);
@@ -85,12 +87,24 @@ import { Icon } from '@iconify/vue'
 }
 
 .detail_container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  max-height: 52px;
 }
 
 h3 {
   font-size: 18px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail_container p {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
