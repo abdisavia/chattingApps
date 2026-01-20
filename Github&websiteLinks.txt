@@ -1,6 +1,0 @@
-Below is the project assignment given to me. I created the website user interface without a backend, so messages cannot be sent, but PDF, image, and video files can still be uploaded. The user interface is responsive for desktop, mobile, and tablet displays.
-
-I added a user authentication simulation to display the user interface according to the authenticated user. Users can be changed by clicking the user icon button in the sidebar navigation (leftmost sidebar).
-
-Repository link : https://github.com/abdisavia/chattingApps
-Website link : https://abdisavia.github.io/chattingApps/
