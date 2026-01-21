@@ -1,10 +1,11 @@
 "use client"
-import { useRef, useEffect, useState, ChangeEvent, SyntheticEvent } from "react"
+import { useRef, useEffect, useState, ChangeEvent, SyntheticEvent, useContext } from "react"
 import { getSession } from "../../_lib/cookie";
 import { createRoom } from "../../_lib/roomActions";
 import { ParticipantType, roomType } from "../../_lib/definitions";
 import { useRouter } from "next/navigation";
 import InputEmailAnggota from "../inputEmailAnggota.";
+import { UserContext } from "@/app/_lib/userContext";
 
 type messages = {
     nama_room?:string,
@@ -14,6 +15,7 @@ type messages = {
 }
 
 export default function GroupModal({closeModal}:{closeModal:() => void}) {
+    const userContext = useContext(UserContext);
     const timer = useRef<NodeJS.Timeout>(null);
     const participantInputRef = useRef<(HTMLInputElement|null)[]>([]);
     const [participants, setParticipants] = useState<ParticipantType[]|null>([])
@@ -101,9 +103,15 @@ export default function GroupModal({closeModal}:{closeModal:() => void}) {
         try{
             const token = await getSession();
             if(!token)throw new Error("Token doesn't Exist");
+
             result = await createRoom(token, data);
-            console.log(result);
+
+            if(result.status !== 201) throw new Error(result.error || "Gagal membuat room");
             result = result.data;
+
+            if(!userContext) throw new Error("User context not found");
+            else if (!userContext.socket) throw new Error("Socket not found in user context");
+            else userContext.socket.emit("join_room", result.id);
         }catch(e:any){
             console.log(e.message);
             return;

@@ -1,12 +1,13 @@
 import { joinSchema,userRoomId } from "../../validators/join.validator.js";
 import { models } from "../../model/index.js";
 
-export const getJoinDataByRoomID = async (roomId) => {
+export const getJoinDataByRoomID = async (roomId, userId) => {
     const validation = joinSchema.validate(roomId);
     if (validation.error) throw new Error(validation.error);
     return await models.Join.findAll({
         where: {
-            roomId:roomId
+            roomId:roomId,
+            [Op.ne]: userId 
         }
     })
 }

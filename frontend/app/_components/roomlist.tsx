@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { getAllRooms } from "../_lib/roomActions";
 import { roomType } from "../_lib/definitions";
 import { Icon } from "@iconify/react";
+import { RoomContext } from "../_lib/roomContext";
 
 export default function RoomList({openModal}:{openModal:Function}){
     const user = useContext(UserContext);
+    const room = useContext(RoomContext);
     const [listRoom, setListRoom] = useState<roomType[]|null>(null);
     const router = useRouter();
 
@@ -20,11 +22,18 @@ export default function RoomList({openModal}:{openModal:Function}){
             const result = await getAllRooms(token);
             if(result.status !== 200) return console.log(result.error);
             const data = result.data;
+            changePersonalRoomName(data);
             setListRoom(data);
-
         }catch(e:any){
             console.log(e.message);
         }
+    }
+
+    const changePersonalRoomName = (room:roomType[]) => {
+        const personalRooms = room.filter(val => val.type === "personal").map(val => {
+            return val.id;
+        })
+        console.log(personalRooms);
     }
 
     useEffect(() => {
@@ -32,7 +41,7 @@ export default function RoomList({openModal}:{openModal:Function}){
     },[])
 
     return (
-        <div className="w-[400px] flex flex-col py-5 px-5 bg-[#C3CDD5]">
+        <div className="w-[500px] flex flex-col py-5 px-5 bg-[#C3CDD5]">
             <header className="flex flex-col gap-4 mb-2 ">
                 <p className="font-semibold text-xl max-w-[120px] truncate text-[#374957]">{user? user.name:""}</p>
                 <div className="flex w-full gap-2 justify-center">
@@ -63,7 +72,15 @@ export default function RoomList({openModal}:{openModal:Function}){
                     listRoom ? listRoom.map((val,idx) => {
                         return (
                             <li key={idx}>
-                                <button type="button" className="w-full flex items-center gap-3 border border-[#C3CDD5] hover:border-[#374957] hover:shadow-md px-3 py-2 text-left cursor-pointer rounded-md">
+                                <button 
+                                type="button" 
+                                className="w-full flex items-center gap-3 border border-[#C3CDD5] hover:border-[#374957] hover:shadow-md px-3 py-2 text-left cursor-pointer rounded-md"
+                                onClick={() => {
+                                    room?.setSelectedRoom(val? val : null)
+                                    console.log(user?.socket);
+                                    user?.socket?.emit("join-room", val.id);
+                                }}
+                                >
                                     <div className="rounded-full w-auto h-[60px] bg-[#374957] p-2">
                                         <Icon icon="mdi:user" width="100%" className="text-white"></Icon>
                                     </div>

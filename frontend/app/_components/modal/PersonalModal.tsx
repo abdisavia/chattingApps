@@ -1,14 +1,17 @@
 "use client"
 import { Icon } from "@iconify/react"
-import { useState,useEffect, useRef } from "react"
+import { useState,useEffect, useRef, useContext } from "react"
 import InputEmailAnggota from "../inputEmailAnggota.";
 import { ParticipantType, roomType } from "@/app/_lib/definitions";
 import { getUserByEmail } from "@/app/_lib/userActions";
 import { useRouter } from "next/navigation";
 import { createRoom } from "@/app/_lib/roomActions";
 import { getSession } from "@/app/_lib/cookie";
+import { UserContext } from "@/app/_lib/userContext";
+
 
 export default function PersonalModal({closeModal}:{closeModal:() => void}) {
+    const userContext = useContext(UserContext);
     const memberRef = useRef<HTMLInputElement|null>(null);
     const [userData, setUserData] = useState<ParticipantType|null>({
         email:"",
@@ -37,7 +40,7 @@ export default function PersonalModal({closeModal}:{closeModal:() => void}) {
         }
 
         const data:roomType = {
-            room_name: userName?.data.name,
+            room_name: null,
             participants: [userData.email],
             type: "personal"
         }
@@ -59,9 +62,13 @@ export default function PersonalModal({closeModal}:{closeModal:() => void}) {
                 return setMessage(result.error);
             }
 
+            if(!userContext) throw new Error("User context not found");
+            else if (!userContext.socket) throw new Error("Socket not found in user context");
+            else userContext.socket.emit("join_room", result.id);
 
         }catch(e:any){
             setMessage(e.message);
+            return; 
         }
         clearAll();
         closeModal();

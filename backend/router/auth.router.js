@@ -14,4 +14,5 @@ authRouter.post('/verify', verifyCookie, (req, res) => {
 authRouter.post('/logout', logout)
 
 
+
 export { authRouter };

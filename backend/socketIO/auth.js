@@ -8,6 +8,7 @@ export const socketAuth = async (socket,next) => {
 
     const user = verifyToken(token);
     socket.userId = user.id;
+    socket.userName = user.name;
 
     const rooms = await getJoinDataByUserID(user.id);
 
