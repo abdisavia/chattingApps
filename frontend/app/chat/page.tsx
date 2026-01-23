@@ -21,10 +21,6 @@ export default function Chat() {
             setMessage(data.message);
         })
     },[room?.selectedRoom])
-    
-    useEffect(() => {
-    },[user?.socket])
-
 
     return (
         <main className="w-full h-screen flex flex-col bg-white justify-center items-center">
@@ -36,7 +32,7 @@ export default function Chat() {
                     </div>
                  : 
                     <div className="w-full h-full">
-                        <ChatHeader room_name={room?.selectedRoom ? room.selectedRoom.room_name : "No Room Selected"} participantCount={3} />
+                        <ChatHeader room_name={room?.selectedRoom ? room.selectedRoom?.room_name : "No Room Selected"} participantCount={3} />
                         <p>Selected Room ID: {room?.selectedRoom.id}</p>
                         <p>{message}</p>
                     </div>

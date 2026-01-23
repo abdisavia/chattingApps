@@ -105,8 +105,8 @@ export default function GroupModal({closeModal}:{closeModal:() => void}) {
             if(!token)throw new Error("Token doesn't Exist");
 
             result = await createRoom(token, data);
-
-            if(result.status !== 201) throw new Error(result.error || "Gagal membuat room");
+            
+            if(result.error) throw new Error(result.error || "Gagal membuat room");
             result = result.data;
 
             if(!userContext) throw new Error("User context not found");

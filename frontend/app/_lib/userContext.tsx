@@ -47,7 +47,7 @@ export default function UserProvider({ children }:{children:React.ReactNode}):Re
         if(!socket.connected) { 
             setUserErrorMessage("Gagal menghubungkan ke server socket");
             console.log("Gagal menghubungkan ke server socket");
-            return;
+            return; 
         }
         if(socket.connected) console.log("Socket connected");
         setUser(prev => prev? {...prev, socket} : prev);

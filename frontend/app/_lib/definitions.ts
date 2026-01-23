@@ -23,7 +23,7 @@ export type userData = {
 
 export type roomType = {
     id?: number,
-    room_name:string|null,
+    room_name?:string|null,
     participants: string[],
     type?:string
 }

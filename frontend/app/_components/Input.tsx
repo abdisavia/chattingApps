@@ -10,6 +10,7 @@ export default function LabelInput({name, type, placeHolder}:{name:string, type:
                 name={name}
                 className="w-full py-2 px-3 border-b rounded-md"
                 placeholder={placeHolder}
+                autoComplete={name}
                 required />
         </div>
     )

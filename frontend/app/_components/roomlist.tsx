@@ -20,25 +20,33 @@ export default function RoomList({openModal}:{openModal:Function}){
             if(!token) return router.replace("/signin");
     
             const result = await getAllRooms(token);
+
+            console.log(result);
+
             if(result.status !== 200) return console.log(result.error);
             const data = result.data;
-            changePersonalRoomName(data);
-            setListRoom(data);
+            const modifiedRooms = changePersonalRoomName(data);
+            setListRoom(modifiedRooms);
         }catch(e:any){
             console.log(e.message);
         }
     }
 
-    const changePersonalRoomName = (room:roomType[]) => {
-        const personalRooms = room.filter(val => val.type === "personal").map(val => {
-            return val.id;
+    const changePersonalRoomName = (room:roomType[]):roomType[] => {
+        console.log(room.map(val => console.log(val.type)));
+        const modifiedRooms = room.map(val => {
+            if(val.type === "personal") {
+                const otherParticipant = val.participants.filter(name => name !== user?.name);
+                val.room_name = otherParticipant[0];
+            }
+            return val;
         })
-        console.log(personalRooms);
+        return modifiedRooms;
     }
 
     useEffect(() => {
-        getRooms();
-    },[])
+        if(user !== null) getRooms();
+    },[user?.name])
 
     return (
         <div className="w-[500px] flex flex-col py-5 px-5 bg-[#C3CDD5]">
@@ -77,7 +85,6 @@ export default function RoomList({openModal}:{openModal:Function}){
                                 className="w-full flex items-center gap-3 border border-[#C3CDD5] hover:border-[#374957] hover:shadow-md px-3 py-2 text-left cursor-pointer rounded-md"
                                 onClick={() => {
                                     room?.setSelectedRoom(val? val : null)
-                                    console.log(user?.socket);
                                     user?.socket?.emit("join-room", val.id);
                                 }}
                                 >
@@ -86,7 +93,7 @@ export default function RoomList({openModal}:{openModal:Function}){
                                     </div>
                                     <div>
                                         <h1 className="text-xl font-bold mb-1 text-[#374957]">{val.room_name}</h1>
-                                        <p className="text-sm text-[#374957]">{val.type}</p>
+                                        <p className="text-sm text-[#374957]">{val.type === "group" ? val.participants.length + " participants" : "Personal Chat"}</p>
                                     </div>
                                 </button>
                             </li>

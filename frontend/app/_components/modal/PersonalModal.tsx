@@ -40,13 +40,11 @@ export default function PersonalModal({closeModal}:{closeModal:() => void}) {
         }
 
         const data:roomType = {
-            room_name: null,
             participants: [userData.email],
             type: "personal"
         }
 
         try{   
-
             const token = await getSession();
             if(!token) return router.replace("/signin");
 
