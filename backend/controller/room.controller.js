@@ -3,9 +3,9 @@ import { createJoin } from "../services/join/create.service.js";
 import { createRoom } from "../services/room/create.service.js";
 import response from "../utils/response.js";
 import { formatError } from "../validators/ErrorFormat.js";
-import { getJoinDataByUserID, getJoinDataByUserIDRoomID } from "../services/join/get.service.js";
-import { getRoomByID,getRoomsByUserId } from "../services/room/get.service.js";
-import { getMessages } from "../services/message/get.service.js";
+import { getJoinDataByRoomID, getJoinDataByUserIDRoomID, getJoinDataByUserID } from "../services/join/get.service.js";
+import { getRoomByID } from "../services/room/get.service.js";
+import { getAllMessages, getLatestMessage } from "../services/message/get.service.js";
 import { getUserService } from "../services/user/get.service.js";
 
 const getById = async (req, res, next) => {
@@ -24,7 +24,7 @@ const getById = async (req, res, next) => {
         const room = await getRoomByID(roomUserData.roomId)
         if (!room) throw new Error("NotFound: Room tidak ditemukan");
         
-        const messages = await getMessages(roomUserData.roomId);
+        const messages = await getAllMessages(roomUserData.roomId);
         
         return res.status(200).json(response(200, {
             room: room,
@@ -43,12 +43,40 @@ const getAllRooms = async (req, res, next) => {
         if (!userId) throw new Error("ValidationError: user id tidak boleh kosong");
         
         
-        const joinedRooms = await getRoomsByUserId(userId);
+        const joinedRooms = await getJoinDataByUserID(userId);
+        console.log("Joined Rooms Length:", joinedRooms.length);
+        for(let i = 0; i < joinedRooms.length; i++){
+            console.log("Joined Rooms: "+joinedRooms[i].dataValues.id);
+        }
+        if(joinedRooms.length < 1) return res.status(200).json(response(200, null, "Kamu belum buat/masuk ke dalam room manapun"));
+        
+        const rooms = [];
+        for(let i = 0; i < joinedRooms.length; i++){
+            const room = await getRoomByID(joinedRooms[i].dataValues.roomId);
 
-        if (joinedRooms.length < 1) return res.status(200).json(response(200, null, "Kamu belum buat/masuk ke dalam room manapun"));
-        return res.status(200).json(response(200, joinedRooms, "room berhasil diambil", null));
+            const participants = await getJoinDataByRoomID(room.id);
+            const participantsData = [];
+            participants?.forEach(async participant => {
+                console.log("participant id : "+participant.dataValues.userId);
+                const user = await getUserService.getUserById(participant.dataValues.userId)
+                if(!user) return null;
+                participantsData.push(user.dataValues.name);
+            });
+            // console.log("Participants Data Promises:", participantsData.then(data => console.log(data)));
+            room.dataValues.participants = participantsData? participantsData : [];
+
+            const latestMessage = await getLatestMessage(room.id);
+            const latestMessageData = latestMessage?.dataValues ? latestMessage.dataValues : null;
+            room.dataValues.latestMessage = latestMessageData;
+            rooms.push(room.dataValues);
+        }
+
+        console.log("Final Rooms Data:", rooms);
+
+        return res.status(200).json(response(200, rooms, "room berhasil diambil", null));
         
     } catch (e) {
+        console.log(e.message);
         const errorFormat = formatError(e.message);
         return res.status(errorFormat.status).json(errorFormat);
     }

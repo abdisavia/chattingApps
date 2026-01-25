@@ -6,8 +6,7 @@ export const roomSchema = Joi.object({
         'any.required': 'Tipe room wajib diisi.',
         'string.base':'Tipe room harus string.'
     }),
-    room_name: Joi.string().pattern(/^[A-Za-z0-9 ]+$/).required().messages({
-        'any.required':'Nama room wajib diisi.',
+    room_name: Joi.string().pattern(/^[A-Za-z0-9 ]+$/).optional().messages({
         'string.pattern.base':"Nama room hanya boleh mengandung huruf besar/kecil/angka/spasi."
     }),
     created_by: Joi.number().required().messages({
