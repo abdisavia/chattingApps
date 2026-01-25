@@ -6,6 +6,7 @@ export const createToken = (userData) => {
     return jwt.sign({
         id: userData.id,
         role: userData.role,
-        name: userData.name
+        name: userData.name,
+        email: userData.email
     }, secret, { expiresIn: '1day' });
 }

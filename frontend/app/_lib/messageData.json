@@ -1,0 +1,50 @@
+[
+    {
+        "message_id": "885512",
+        "sender_id": 2,
+        "type": "text",
+        "message": "Selamat malam",
+        "attachment": null,
+        "created_at": "2025-03-10T09:30:00Z"
+    },
+    {
+        "message_id": "885513",
+        "sender_id": 1,
+        "type": "text",
+        "message": "Malam",
+        "attachment": null,
+        "created_at": "2025-03-10T09:31:10Z"
+    },
+    {
+        "message_id": "885514",
+        "sender_id": 1,
+        "type": "text",
+        "message": "Ada yang bisa saya bantu?",
+        "attachment": null,
+        "created_at": "2025-03-10T09:32:00Z"
+    },
+    {
+        "message_id": "885515",
+        "sender_id": 2,
+        "type": "text",
+        "message": "Saya ingin mengirimkan bukti pembayaran, karena diaplikasi selalu gagal",
+        "attachment": null,
+        "created_at": "2025-03-10T09:33:00Z"
+    },
+    {
+        "message_id": "885516",
+        "sender_id": 1,
+        "type": "text",
+        "message": "Baik, silahkan kirimkan lampiran bukti pembayarannya",
+        "attachment": null,
+        "created_at": "2025-03-10T09:34:00Z"
+    },
+    {
+        "message_id": "885517",
+        "sender_id": 2,
+        "type": "text",
+        "message": "Waduh ternyata hilang e kak bukti pembayarannya",
+        "attachment": null,
+        "created_at": "2025-03-10T09:34:00Z"
+    }
+]

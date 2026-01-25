@@ -57,10 +57,13 @@ const getAllRooms = async (req, res, next) => {
             const participants = await getJoinDataByRoomID(room.id);
             const participantsData = [];
             participants?.forEach(async participant => {
-                console.log("participant id : "+participant.dataValues.userId);
                 const user = await getUserService.getUserById(participant.dataValues.userId)
                 if(!user) return null;
-                participantsData.push(user.dataValues.name);
+                participantsData.push({
+                    id:user.dataValues.id,
+                    name:user.dataValues.name,
+                    role:participant.dataValues.role
+                });
             });
             // console.log("Participants Data Promises:", participantsData.then(data => console.log(data)));
             room.dataValues.participants = participantsData? participantsData : [];
@@ -70,8 +73,6 @@ const getAllRooms = async (req, res, next) => {
             room.dataValues.latestMessage = latestMessageData;
             rooms.push(room.dataValues);
         }
-
-        console.log("Final Rooms Data:", rooms);
 
         return res.status(200).json(response(200, rooms, "room berhasil diambil", null));
         

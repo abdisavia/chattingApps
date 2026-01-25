@@ -33,11 +33,10 @@ export default function RoomList({openModal}:{openModal:Function}){
     }
 
     const changePersonalRoomName = (room:roomType[]):roomType[] => {
-        console.log(room.map(val => console.log(val.type)));
         const modifiedRooms = room.map(val => {
             if(val.type === "personal") {
-                const otherParticipant = val.participants.filter(name => name !== user?.name);
-                val.room_name = otherParticipant[0];
+                const otherParticipant = val.participants.filter(value => value.name !== user?.name);
+                val.room_name = otherParticipant[0].name;
             }
             return val;
         })

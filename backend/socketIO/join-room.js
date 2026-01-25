@@ -4,7 +4,7 @@ export const joinRoomHandler =  (io, socket) => {
         if (!socket.allowedRooms?.has(id)) return;
         socket.join(`room:${id}`)
         console.log(`User ${socket.userName} joined room:${id}`);
-        io.to(`room:${id}`).emit(`new-message`, {
+        socket.to(`room:${id}`).emit(`new-message`, {
             userId: "system",
             message: `${socket.userName} has joined the room.`
         });

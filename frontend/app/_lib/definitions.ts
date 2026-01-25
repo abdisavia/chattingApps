@@ -24,11 +24,20 @@ export type userData = {
 export type roomType = {
     id?: number,
     room_name?:string|null,
-    participants: string[],
+    participants: userData[],
     type?:string
 }
 
 export type ParticipantType = {
     email:string,
     err:string|null
+}
+
+export type MessageType = {
+    message_id:number,
+    sender_id:number,
+    type:string,
+    message:string,
+    attachment: string|null,
+    created_at: string
 }

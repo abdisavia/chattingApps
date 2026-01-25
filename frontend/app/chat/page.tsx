@@ -1,26 +1,50 @@
 "use client";
 import { useEffect,useContext, useState } from "react";
-import { roomType } from "../_lib/definitions";
+import { MessageType } from "../_lib/definitions";
 import { RoomContext } from "../_lib/roomContext";
 import ChatHeader from "@/app/_components/chat/Header";
 import { Icon } from "@iconify/react";
 import { UserContext } from "../_lib/userContext";
+import ChatMessages from "../_components/chat/Messages";
+import msgData from "@/app/_lib/messageData.json";
+import ChatFooter from "../_components/chat/Footer";
 
 
 export default function Chat() {
     const room = useContext(RoomContext);
     const user = useContext(UserContext);
-    const [message, setMessage] = useState<string|null>(null);
+    const [message, setMessage] = useState<MessageType[]>([]);
 
     useEffect(() => {
-        console.log("Selected Room ID changed:", room?.selectedRoom);
         if(!user?.socket) return;
-        console.log(`Setting up socket listener for new-message ${user?.socket?.connected}`);
         user?.socket?.on('new-message', (data:any) => {
-            console.log("New message received:", data);
-            setMessage(data.message);
+            // setMessage((prev:MessageType[]) => {
+            //         const newData = [...prev];
+                    // newData.push({
+                    //     message_id:data?.messageId || 0,
+                    //     sender_id:data?.sender_id || 0,
+                    //     type: data?.type || 'text',
+                    //     message: data?.message || "no message found",
+                    //     attachment: data?.attachment || [],
+                    //     created_at: data?.created_at || new Date().toISOString()
+                    // });
+            //         return newData
+            //     }
+            // );
         })
-    },[room?.selectedRoom])
+        const data:MessageType[] = msgData.map(val => {
+            return {
+                message_id: Number(val?.message_id) || 0,
+                sender_id: val?.sender_id || 0,
+                type: val?.type || 'text',
+                message: val?.message || "no message found",
+                attachment: val?.attachment,
+                created_at: val?.created_at || new Date().toISOString()
+            }
+        });
+        setMessage(data);
+    },[room])
+    
 
     return (
         <main className="w-full h-screen flex flex-col bg-white justify-center items-center">
@@ -31,10 +55,10 @@ export default function Chat() {
                         <p className="text-gray-500">Pilih Room untuk mulai chat</p>
                     </div>
                  : 
-                    <div className="w-full h-full">
-                        <ChatHeader room_name={room?.selectedRoom ? room.selectedRoom?.room_name : "No Room Selected"} participantCount={3} />
-                        <p>Selected Room ID: {room?.selectedRoom.id}</p>
-                        <p>{message}</p>
+                    <div className="flex flex-col w-full h-screen">
+                        <ChatHeader />
+                        <ChatMessages messages={message} />
+                        <ChatFooter/>
                     </div>
             }
         </main>
