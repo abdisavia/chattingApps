@@ -22,8 +22,8 @@ export default function ChatMessages({messages}:{messages:MessageType[]}){
         <div className="flex-1 overflow-y-auto p-4 h-full overflow-y-auto" ref={container}>
             <div className="flex flex-col gap-4" ref={messageContainer}>
                 {
-                    messages.map(val => {
-                        return <BubbleText message={val} key={val.message_id}/>
+                    messages.length > 0 && messages.map((val,idx) => {
+                        return <BubbleText message={val} key={idx}/>
                     })
                 }
             </div>

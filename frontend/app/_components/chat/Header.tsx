@@ -2,6 +2,7 @@
 import { RoomContext } from "@/app/_lib/roomContext";
 import { useContext, useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
+import { UserContext } from "@/app/_lib/userContext";
 
 export default function ChatHeader() {
     const room = useContext(RoomContext);
@@ -13,8 +14,9 @@ export default function ChatHeader() {
         }
     },[room?.selectedRoom])
 
+
     return (
-        <header className="bg-[#374957] text-white p-4 flex items-center gap-4">
+        <header className="bg-[#374957] text-white p-4 flex items-center gap-4 relative">
             <div className="w-[60px] h-[60px] rounded-full p-2 bg-white">
                 <Icon icon="mdi:user" width={"100%"} className="text-[#374957]"></Icon>
             </div>

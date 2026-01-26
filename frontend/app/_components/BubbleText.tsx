@@ -16,7 +16,7 @@ export default function BubbleText({message}:{message:MessageType}){
     }
 
     useEffect(() => {
-        const sender =  room?.selectedRoom?.participants.find(val => val.id === message.sender_id)
+        const sender =  room?.selectedRoom?.participants.find(val => val.id === message.senderId)
         const userName = sender?.name || "username tidak ditemukan";
         setUserName(userName);
         if(sender?.id === user?.id){
@@ -28,7 +28,7 @@ export default function BubbleText({message}:{message:MessageType}){
         <div className={"flex flex-col rounded-lg ".concat(isMyMessage? "items-end": "items-start")}>
             <div className="flex max-w-[150px] items-end gap-1 mb-1">
                 <p className="text-md">{userName}</p>
-                <small className="text-xs text-gray-500">{formatDate(message.created_at)}</small>
+                <small className="text-xs text-gray-500">{formatDate(message.createdAt)}</small>
             </div>
             <div className={"block p-3 rounded-lg mb-2 ".concat(isMyMessage? "bg-[#374957]":"bg-[#C3CDD5]")}>
                 <p className={"w-full max-w-[450px] text-pretty overflow-wrap break-word ".concat(isMyMessage?"text-white text-right":"text-[#374957] text-left")}>

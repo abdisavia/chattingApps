@@ -20,9 +20,6 @@ export default function RoomList({openModal}:{openModal:Function}){
             if(!token) return router.replace("/signin");
     
             const result = await getAllRooms(token);
-
-            console.log(result);
-
             if(result.status !== 200) return console.log(result.error);
             const data = result.data;
             const modifiedRooms = changePersonalRoomName(data);

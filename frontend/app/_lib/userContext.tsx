@@ -32,7 +32,7 @@ export default function UserProvider({ children }:{children:React.ReactNode}):Re
                 return router.replace("/signin");
             };
         
-            const data = result?.data;
+            const data = result.data;
             setUser(data);
             socketConnect(token);
         }catch(e:any){
@@ -51,7 +51,6 @@ export default function UserProvider({ children }:{children:React.ReactNode}):Re
         }
         if(socket.connected) console.log("Socket connected");
         setUser(prev => prev? {...prev, socket} : prev);
-        console.log(user);
     }
 
     useEffect(() => { 

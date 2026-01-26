@@ -34,10 +34,10 @@ export type ParticipantType = {
 }
 
 export type MessageType = {
-    message_id:number,
-    sender_id:number,
+    id:number,
+    senderId:number,
     type:string,
     message:string,
-    attachment: string|null,
-    created_at: string
+    attachmentsId: number|null,
+    createdAt: string
 }
