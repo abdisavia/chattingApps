@@ -1,6 +1,7 @@
 import { sequelize } from "../config/dbconfig.js";
 import { DataTypes } from "sequelize";
 import { users } from "./userModel.js";
+import { Attachments } from "./attachmentsModel.js";
 
 export const Messages = sequelize.define('Message', {
     id: {
@@ -16,11 +17,11 @@ export const Messages = sequelize.define('Message', {
         type: DataTypes.TEXT,
         allowNull: true
     },
-    attachmentId: {
+    attachmentsId: {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-            model: 'attachments',
+            model: Attachments,
             key: 'id'
         }
     },

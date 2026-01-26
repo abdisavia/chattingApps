@@ -44,10 +44,6 @@ const getAllRooms = async (req, res, next) => {
         
         
         const joinedRooms = await getJoinDataByUserID(userId);
-        console.log("Joined Rooms Length:", joinedRooms.length);
-        for(let i = 0; i < joinedRooms.length; i++){
-            console.log("Joined Rooms: "+joinedRooms[i].dataValues.id);
-        }
         if(joinedRooms.length < 1) return res.status(200).json(response(200, null, "Kamu belum buat/masuk ke dalam room manapun"));
         
         const rooms = [];
@@ -88,7 +84,6 @@ const create = async (req, res, next) => {
     try {
         const roomData = req.body;
         roomData.created_by = req.user.id;
-        console.log(roomData);
         const createdRoom = await createRoom(roomData, transaction);
 
         await createJoin({

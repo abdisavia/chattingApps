@@ -43,8 +43,6 @@ const startServer = async () => {
     io.use(socketAuth);
     
     io.on('connection', (socket) => {
-        // socket = socketAuth(socket)
-        console.log('Login as : ', socket.userId);
         joinRoomHandler(io, socket);
         messageEventHandler(io, socket);
     })

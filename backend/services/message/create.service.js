@@ -1,16 +1,18 @@
 import { models } from "../../model/index.js";
 import { messageSchema } from "../../validators/message.validator.js";
 
-export const createMessage = async (messageData) => {
-    // Implementation for sending a message
-    if (!messageData) throw new Error("ValidationError:Message data is required");
-    const validation = messageSchema.validate({abortEarly:false});
-    if (validation.error) throw new Error(validation.error.details.map(x => x.message).join(", "))
+export const createMessage = async (messageData, transaction) => {
+    // validasi data
+    const validation = messageSchema.validate(messageData,{abortEarly:false});
+    if (validation.error) throw new Error(validation.error)
     
-    const selectRoom = await models.Messages.findByPk(messageData.roomId);
-    if (!selectRoom) throw new Error("ValidationError: Message should be send to a room")
-    const selectUser = await models.users.findByPk(messageData.userId);
-    if (!selectUser) throw new Error("ValidationError: Message should be created by a user")
+    //ambil data room
+    const selectRoom = await models.Rooms.findByPk(messageData.roomId);
+    if (!selectRoom) throw new Error("ValidationError: room tidak ditemukan")
+
+    //ambil user
+    const selectUser = await models.users.findByPk(messageData.senderId);
+    if (!selectUser) throw new Error("ValidationError: user tidak ditemukan")
     
-    return models.Messages.create(messageData)
+    return models.Messages.create(messageData, transaction)
 }

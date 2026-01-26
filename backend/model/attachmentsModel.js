@@ -1,7 +1,7 @@
 import { sequelize } from '../config/dbconfig.js';
 import { DataTypes } from 'sequelize';
 
-export const Attachments = sequelize.define('Attachment', {
+export const Attachments = sequelize.define('Attachments', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

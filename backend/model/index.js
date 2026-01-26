@@ -11,8 +11,8 @@ const defineAssociations = () => {
     Rooms.hasMany(Messages, { foreignKey: 'roomId' });
     Messages.belongsTo(users, {foreignKey: 'senderId'});
     Messages.belongsTo(Rooms, { foreignKey: 'roomId' });
-    Messages.hasMany(Attachments, { foreignKey: 'attachmentId' });
-    Attachments.belongsTo(Messages, { foreignKey: 'attachmentId' });
+    Messages.hasMany(Attachments, { foreignKey: 'attachmentsId' });
+    Attachments.belongsTo(Messages, { foreignKey: 'attachmentsId' });
 };
 
 export const models = {
